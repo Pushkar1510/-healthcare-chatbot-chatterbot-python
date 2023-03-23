@@ -1,0 +1,61 @@
+{% extends 'thebot/base.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+<header class="page-header">
+  <div class="container">
+    <div class="d-flex flex-row bd-highlight mb-3">
+      <img class="btn" src="{% static 'thebot/bot3.png' %}" alt=""></a>
+      <h2 style="padding-top: 10px;">Healthcare Chatbot</h2>
+    </div>
+  </div>
+</header>
+<div class="main" id="main">
+  <div class="container ">
+    {% autoescape on %}
+    <div class="chat-log">
+        {% for msg in unimessage %}
+          {% if forloop.counter0|divisibleby:"2" %}
+            <div class="chat-log__item chat-log__item--own">
+              <h3 class="chat-log__author">You <small>{{ time }}</small></h3>
+            <div class="chat-log__message">{{ msg|linebreaks }}</div>
+            </div>
+          {% else %}
+            <div class="chat-log__item">
+              <h3 class="chat-log__author">Bot <small>{{ time }}</small></h3>
+            <div class="chat-log__message">{{ msg|linebreaks }}</div>
+            </div>
+          {% endif %}
+        {% endfor %}
+        {% if flagi|divisibleby:"2" %}
+        <div class="chat-log__item">
+          <form method="POST">
+            {% csrf_token %}
+            {{ sympform.as_p }}
+            <input type="submit" value="Submit" name="sympsub">
+          </form>
+        <div class="chat-log__message">{{ msg|linebreaks }}</div>
+        {% endif %}
+      <script type='text/javascript'>scrollWin();</script>
+    </div>
+    {% endautoescape %}
+  </div>
+  <div class="chat-form">
+    <div class="container ">
+      <form class="form-horizontal" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-sm-10 col-xs-8">
+            {{ form|crispy }}
+          </div>
+          <div class="col-sm-2 col-xs-4">
+            <button onclick="scrollWin()" type="submit" class="btn btn-success btn-block" style="background-color: #9359e4">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
